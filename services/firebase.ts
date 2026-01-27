@@ -68,35 +68,17 @@ export const submitSurvey = async (data: SurveyData): Promise<void> => {
 };
 
 export const getAllResponses = async (): Promise<SurveyResponse[]> => {
-  if (!db) return [];
-
   try {
-    const q = query(collection(db, "nps_responses"), orderBy("submittedAt", "desc"));
-    const querySnapshot = await getDocs(q);
+    console.log("Buscando respostas via servidor...");
+    const response = await fetch('/.netlify/functions/get-responses');
 
-    return querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      // Handle legacy data structure where fields were flat
-      // If 'evaluations' doesn't exist but 'professor' does, migrate it on the fly for display
-      let evaluations = data.evaluations || [];
-      if (evaluations.length === 0 && data.professor) {
-        evaluations = [{
-          professor: data.professor,
-          toneRespect: data.toneRespect,
-          professionalPosture: data.professionalPosture,
-          attention: data.attention,
-          correctionQuality: data.correctionQuality,
-          didactic: data.didactic,
-          adaptation: data.adaptation
-        }];
-      }
+    if (!response.ok) {
+      throw new Error(`Erro HTTP ao buscar dados: ${response.status}`);
+    }
 
-      return {
-        id: doc.id,
-        ...data,
-        evaluations
-      };
-    }) as SurveyResponse[];
+    const data = await response.json();
+    console.log(`Carregadas ${data.length} respostas.`);
+    return data as SurveyResponse[];
   } catch (error) {
     console.error("Erro ao buscar respostas:", error);
     throw error;
