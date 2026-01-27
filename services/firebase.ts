@@ -28,21 +28,28 @@ try {
 }
 
 export const submitSurvey = async (data: SurveyData): Promise<void> => {
-  if (!db) {
-    throw new Error("Firestore não foi inicializado corretamente.");
-  }
-
   try {
-    console.log("Tentando enviar dados para o Firestore:", JSON.stringify(data, null, 2));
-    const docRef = await addDoc(collection(db, "nps_responses"), {
-      ...data,
-      submittedAt: serverTimestamp(),
-      platform: 'web-app',
-      userAgent: navigator.userAgent
+    console.log("Tentando enviar dados via Netlify Functions:", JSON.stringify(data, null, 2));
+
+    // Use relative path for the function
+    const response = await fetch('/.netlify/functions/submit-survey', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
-    console.log("Documento gravado com ID: ", docRef.id);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Erro HTTP: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("Enviado com sucesso via servidor!", result);
+
   } catch (error) {
-    console.error("Erro DETALHADO ao salvar documento: ", error);
+    console.error("Erro DETALHADO ao enviar via função: ", error);
     if (error instanceof Error) {
       console.error("Mensagem: ", error.message);
       console.error("Stack: ", error.stack);
