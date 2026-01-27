@@ -134,6 +134,17 @@ export const Step2Method: React.FC<StepProps> = ({
           ]}
         />
 
+        {/* 9. Compliment */}
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-live-green mb-2">Deixe um elogio para o professor (Opcional)</label>
+          <textarea
+            value={safeCurrent.compliment || ''}
+            onChange={(e) => updateEvaluation && updateEvaluation('compliment', e.target.value)}
+            placeholder="O que você mais gostou na aula deste professor?"
+            className="w-full bg-[#06192a]/80 border border-white/20 rounded-lg p-3 text-white focus:outline-none focus:border-live-green min-h-[100px] resize-none"
+          />
+        </div>
+
         {/* Add Button */}
         <div className="mt-8 flex justify-end">
           <button

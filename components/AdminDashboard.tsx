@@ -41,8 +41,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     if (responses.length === 0) return;
 
     const headers = [
-      "Data", "NPS", "Motivo", "Professor",
-      "Tom/Respeito", "Postura", "Atenção", "Correção", "Didática", "Adaptação",
+      "Data", "NPS", "Motivo", "Professores", "Elogios",
       "Música", "Sugestão Musical", "Limpeza", "Serviços Conhecidos"
     ];
 
@@ -54,18 +53,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           : 'N/A';
 
         const ecosystem = r.ecosystem ? r.ecosystem.join(" | ") : "";
+        const professors = r.evaluations?.map(e => e.professor).join(" | ") || r.professor || "";
+        const compliments = r.evaluations?.map(e => `${e.professor}: ${e.compliment || ''}`).join(" | ") || "";
 
         return [
           `"${date}"`,
           r.npsScore,
           `"${(r.npsReason || '').replace(/"/g, '""')}"`,
-          `"${r.professor}"`,
-          r.toneRespect,
-          r.professionalPosture,
-          r.attention,
-          r.correctionQuality,
-          r.didactic,
-          r.adaptation,
+          `"${professors}"`,
+          `"${compliments.replace(/"/g, '""')}"`,
           `"${r.musicAtmosphere}"`,
           `"${(r.musicSuggestion || '').replace(/"/g, '""')}"`,
           r.cleanliness,
@@ -152,9 +148,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             <thead className="bg-black/30 text-xs uppercase font-medium text-gray-400">
               <tr>
                 <th className="px-6 py-4">Data</th>
-                <th className="px-6 py-4">Professor</th>
+                <th className="px-6 py-4">Professor(es)</th>
                 <th className="px-6 py-4 text-center">NPS</th>
                 <th className="px-6 py-4">Motivo</th>
+                <th className="px-6 py-4">Elogios</th>
                 <th className="px-6 py-4 text-center">Limpeza</th>
               </tr>
             </thead>
@@ -166,7 +163,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                       ? new Date(row.submittedAt.seconds * 1000).toLocaleDateString('pt-BR')
                       : '-'}
                   </td>
-                  <td className="px-6 py-4 font-medium text-white">{row.professor}</td>
+                  <td className="px-6 py-4 font-medium text-white max-w-[150px] truncate">
+                    {row.evaluations?.map(e => e.professor).join(", ") || row.professor || '-'}
+                  </td>
                   <td className="px-6 py-4 text-center">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                       ${(row.npsScore || 0) >= 9 ? 'bg-green-900/50 text-green-200' :
@@ -177,6 +176,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                   </td>
                   <td className="px-6 py-4 max-w-xs truncate" title={row.npsReason}>
                     {row.npsReason || <span className="text-gray-600 italic">Sem comentário</span>}
+                  </td>
+                  <td className="px-6 py-4 max-w-xs truncate" title={row.evaluations?.map(e => `${e.professor}: ${e.compliment}`).join("\n")}>
+                    {row.evaluations?.map(e => e.compliment).filter(Boolean).join(" | ") || '-'}
                   </td>
                   <td className="px-6 py-4 text-center">{row.cleanliness}/5</td>
                 </tr>

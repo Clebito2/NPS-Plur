@@ -6,6 +6,7 @@ export interface TeacherEvaluation {
   correctionQuality: string; // 1, 3, 5
   didactic: number; // 1-5 stars
   adaptation: string; // 1, 3, 5
+  compliment?: string; // NOVO: Campo de elogio opcional
 }
 
 export interface SurveyData {

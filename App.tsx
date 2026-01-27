@@ -29,7 +29,8 @@ const App: React.FC = () => {
     attention: '',
     correctionQuality: '',
     didactic: 0,
-    adaptation: ''
+    adaptation: '',
+    compliment: ''
   };
 
   const [currentEvaluation, setCurrentEvaluation] = useState<TeacherEvaluation>(initialEvaluation);
@@ -122,9 +123,7 @@ const App: React.FC = () => {
       setSubmitted(true);
     } catch (err: any) {
       console.error("Submission Error:", err);
-      // Show the actual error message for debugging
-      const errorMessage = err.message || "Erro desconhecido";
-      setError(`Erro: ${errorMessage}. Tente novamente.`);
+      setError("Houve um erro ao enviar suas respostas. Por favor, tente novamente.");
     } finally {
       setIsSubmitting(false);
     }
