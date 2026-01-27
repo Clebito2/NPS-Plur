@@ -101,8 +101,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         >
           <ArrowLeft size={20} className="mr-2" /> Voltar
         </button>
-        <h2 className="text-2xl font-serif font-bold text-live-green">Painel Administrativo</h2>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={fetchData}
+            className="p-2 text-gray-400 hover:text-live-green transition-colors"
+            title="Recarregar dados"
+          >
+            <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+          </button>
+          <h2 className="text-2xl font-serif font-bold text-live-green">Painel Administrativo</h2>
+        </div>
       </div>
+
+      {error && (
+        <div className="bg-red-500/20 border border-red-500 text-white p-4 rounded-xl mb-6 backdrop-blur-sm flex justify-between items-center">
+          <span>{error}</span>
+          <button
+            onClick={fetchData}
+            className="text-xs bg-red-500 px-2 py-1 rounded hover:bg-red-600 transition-colors"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
