@@ -120,8 +120,11 @@ const App: React.FC = () => {
     try {
       await submitSurvey(formData);
       setSubmitted(true);
-    } catch (err) {
-      setError("Houve um erro ao enviar suas respostas. Por favor, tente novamente.");
+    } catch (err: any) {
+      console.error("Submission Error:", err);
+      // Show the actual error message for debugging
+      const errorMessage = err.message || "Erro desconhecido";
+      setError(`Erro: ${errorMessage}. Tente novamente.`);
     } finally {
       setIsSubmitting(false);
     }

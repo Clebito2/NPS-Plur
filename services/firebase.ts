@@ -41,8 +41,17 @@ export const submitSurvey = async (data: SurveyData): Promise<void> => {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || `Erro HTTP: ${response.status}`);
+      let errorMessage = `Erro HTTP: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMessage = errorData.error;
+      } catch (e) {
+        // Could not parse JSON, likely an HTML 404 or 500 page
+        const text = await response.text();
+        console.error("Non-JSON error response:", text.slice(0, 200)); // Log first 200 chars
+        if (response.status === 404) errorMessage = "Serviço de envio não encontrado (404)";
+      }
+      throw new Error(errorMessage);
     }
 
     const result = await response.json();
