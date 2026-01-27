@@ -78,9 +78,9 @@ export const Step2Method: React.FC<StepProps> = ({
           selectedValue={safeCurrent.toneRespect}
           onChange={(val) => updateEvaluation && updateEvaluation('toneRespect', val)}
           options={[
-            { value: '1', label: 'Invasivo (1)' },
-            { value: '3', label: 'Regular (3)' },
-            { value: '5', label: 'Acolhedor (5)' },
+            { value: '1', label: 'Invasivo' },
+            { value: '3', label: 'Regular' },
+            { value: '5', label: 'Acolhedor' },
           ]}
         />
 
@@ -97,9 +97,9 @@ export const Step2Method: React.FC<StepProps> = ({
           selectedValue={safeCurrent.attention}
           onChange={(val) => updateEvaluation && updateEvaluation('attention', val)}
           options={[
-            { value: '1', label: 'Distraído (1)' },
-            { value: '3', label: 'Médio (3)' },
-            { value: '5', label: 'Foco Total (5)' },
+            { value: '1', label: 'Distraído' },
+            { value: '3', label: 'Médio' },
+            { value: '5', label: 'Foco Total' },
           ]}
         />
 
@@ -109,9 +109,9 @@ export const Step2Method: React.FC<StepProps> = ({
           selectedValue={safeCurrent.correctionQuality}
           onChange={(val) => updateEvaluation && updateEvaluation('correctionQuality', val)}
           options={[
-            { value: '1', label: 'Não corrige (1)' },
-            { value: '3', label: 'Básico (3)' },
-            { value: '5', label: 'Excelente (5)' },
+            { value: '1', label: 'Não corrige' },
+            { value: '3', label: 'Básico' },
+            { value: '5', label: 'Excelente' },
           ]}
         />
 
@@ -128,9 +128,9 @@ export const Step2Method: React.FC<StepProps> = ({
           selectedValue={safeCurrent.adaptation}
           onChange={(val) => updateEvaluation && updateEvaluation('adaptation', val)}
           options={[
-            { value: '1', label: 'Não adapta (1)' },
-            { value: '3', label: 'Adapta se pedir (3)' },
-            { value: '5', label: 'Proativo (5)' },
+            { value: '1', label: 'Não adapta' },
+            { value: '3', label: 'Adapta se pedir' },
+            { value: '5', label: 'Proativo' },
           ]}
         />
 
