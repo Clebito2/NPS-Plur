@@ -73,7 +73,16 @@ export const getAllResponses = async (): Promise<SurveyResponse[]> => {
     const response = await fetch('/.netlify/functions/get-responses');
 
     if (!response.ok) {
-      throw new Error(`Erro HTTP ao buscar dados: ${response.status}`);
+      let errorMessage = `Erro HTTP: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMessage = errorData.error;
+      } catch (e) {
+        const text = await response.text();
+        console.error("Non-JSON error response from get-responses:", text.slice(0, 200));
+        if (response.status === 404) errorMessage = "Serviço de consulta não encontrado (404)";
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();

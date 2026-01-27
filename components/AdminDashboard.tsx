@@ -19,8 +19,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
       const data = await getAllResponses();
       setResponses(data);
       setError(null);
-    } catch (err) {
-      setError("Erro ao carregar dados.");
+    } catch (err: any) {
+      console.error("Admin Fetch Error:", err);
+      setError(`Erro: ${err.message || "Erro desconhecido ao carregar dados."}`);
     } finally {
       setLoading(false);
     }
@@ -40,7 +41,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     if (responses.length === 0) return;
 
     const headers = [
-      "Data", "NPS", "Motivo", "Professor", 
+      "Data", "NPS", "Motivo", "Professor",
       "Tom/Respeito", "Postura", "Atenção", "Correção", "Didática", "Adaptação",
       "Música", "Sugestão Musical", "Limpeza", "Serviços Conhecidos"
     ];
@@ -48,10 +49,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     const csvContent = [
       headers.join(","),
       ...responses.map(r => {
-        const date = r.submittedAt?.seconds 
-          ? new Date(r.submittedAt.seconds * 1000).toLocaleString('pt-BR') 
+        const date = r.submittedAt?.seconds
+          ? new Date(r.submittedAt.seconds * 1000).toLocaleString('pt-BR')
           : 'N/A';
-        
+
         const ecosystem = r.ecosystem ? r.ecosystem.join(" | ") : "";
 
         return [
@@ -77,7 +78,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `PLUR_NPS_Export_${new Date().toISOString().slice(0,10)}.csv`);
+    link.setAttribute('download', `PLUR_NPS_Export_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -94,7 +95,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   return (
     <div className="space-y-6 animate-fade-in-up pb-24">
       <div className="flex justify-between items-center mb-6">
-        <button 
+        <button
           onClick={onBack}
           className="flex items-center text-gray-300 hover:text-white transition-colors"
         >
@@ -109,7 +110,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           <span className="text-gray-400 text-sm uppercase tracking-wider">Total de Respostas</span>
           <span className="text-4xl font-bold text-white mt-2">{responses.length}</span>
         </GlassCard>
-        
+
         <GlassCard className="flex flex-col items-center justify-center py-6">
           <span className="text-gray-400 text-sm uppercase tracking-wider">NPS Médio</span>
           <span className={`text-4xl font-bold mt-2 ${Number(averageNPS) >= 9 ? 'text-live-green' : Number(averageNPS) >= 7 ? 'text-yellow-400' : 'text-red-500'}`}>
@@ -118,8 +119,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         </GlassCard>
 
         <GlassCard className="flex flex-col items-center justify-center py-6 cursor-pointer hover:bg-white/5 transition-colors" onClick={handleExportCSV}>
-            <Download size={32} className="text-live-green mb-2" />
-            <span className="text-live-green font-bold">Baixar Excel (CSV)</span>
+          <Download size={32} className="text-live-green mb-2" />
+          <span className="text-live-green font-bold">Baixar Excel (CSV)</span>
         </GlassCard>
       </div>
 
@@ -140,16 +141,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               {responses.map((row) => (
                 <tr key={row.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {row.submittedAt?.seconds 
-                      ? new Date(row.submittedAt.seconds * 1000).toLocaleDateString('pt-BR') 
+                    {row.submittedAt?.seconds
+                      ? new Date(row.submittedAt.seconds * 1000).toLocaleDateString('pt-BR')
                       : '-'}
                   </td>
                   <td className="px-6 py-4 font-medium text-white">{row.professor}</td>
                   <td className="px-6 py-4 text-center">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                      ${(row.npsScore || 0) >= 9 ? 'bg-green-900/50 text-green-200' : 
-                        (row.npsScore || 0) >= 7 ? 'bg-yellow-900/50 text-yellow-200' : 
-                        'bg-red-900/50 text-red-200'}`}>
+                      ${(row.npsScore || 0) >= 9 ? 'bg-green-900/50 text-green-200' :
+                        (row.npsScore || 0) >= 7 ? 'bg-yellow-900/50 text-yellow-200' :
+                          'bg-red-900/50 text-red-200'}`}>
                       {row.npsScore}
                     </span>
                   </td>
