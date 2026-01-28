@@ -31,6 +31,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     fetchData();
   }, []);
 
+  const normalizeProfessor = (name: string) => {
+    if (name === 'Pedro Paulo' || name === 'Paulo') return 'Theo';
+    return name;
+  };
+
   // Calculate Average NPS
   const averageNPS = responses.length > 0
     ? (responses.reduce((acc, curr) => acc + (curr.npsScore || 0), 0) / responses.length).toFixed(1)
@@ -53,8 +58,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
           : 'N/A';
 
         const ecosystem = r.ecosystem ? r.ecosystem.join(" | ") : "";
-        const professors = r.evaluations?.map(e => e.professor).join(" | ") || r.professor || "";
-        const compliments = r.evaluations?.map(e => `${e.professor}: ${e.compliment || ''}`).join(" | ") || "";
+        const professors = r.evaluations?.map(e => normalizeProfessor(e.professor)).join(" | ") || normalizeProfessor(r.professor || "");
+        const compliments = r.evaluations?.map(e => `${normalizeProfessor(e.professor)}: ${e.compliment || ''}`).join(" | ") || "";
 
         return [
           `"${date}"`,
@@ -164,7 +169,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                       : '-'}
                   </td>
                   <td className="px-6 py-4 font-medium text-white max-w-[150px] truncate">
-                    {row.evaluations?.map(e => e.professor).join(", ") || row.professor || '-'}
+                    {row.evaluations?.map(e => normalizeProfessor(e.professor)).join(", ") || normalizeProfessor(row.professor || '-')}
                   </td>
                   <td className="px-6 py-4 text-center">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -177,7 +182,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
                   <td className="px-6 py-4 max-w-xs truncate" title={row.npsReason}>
                     {row.npsReason || <span className="text-gray-600 italic">Sem comentário</span>}
                   </td>
-                  <td className="px-6 py-4 max-w-xs truncate" title={row.evaluations?.map(e => `${e.professor}: ${e.compliment}`).join("\n")}>
+                  <td className="px-6 py-4 max-w-xs truncate" title={row.evaluations?.map(e => `${normalizeProfessor(e.professor)}: ${e.compliment}`).join("\n")}>
                     {row.evaluations?.map(e => e.compliment).filter(Boolean).join(" | ") || '-'}
                   </td>
                   <td className="px-6 py-4 text-center">{row.cleanliness}/5</td>
@@ -193,7 +198,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             </tbody>
           </table>
         </div>
-      </GlassCard>
-    </div>
+      </GlassCard >
+    </div >
   );
 };

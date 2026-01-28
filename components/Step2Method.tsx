@@ -68,13 +68,13 @@ export const Step2Method: React.FC<StepProps> = ({
             <option value="Átila">Átila</option>
             <option value="Rama">Rama</option>
             <option value="Luiz">Luiz</option>
-            <option value="Pedro Paulo">Pedro Paulo</option>
+            <option value="Theo">Theo</option>
           </select>
         </div>
 
         {/* 3. Tone and Respect */}
         <RadioGroup
-          label="3. Tom e Respeito (Inegociável)"
+          label="3. Tom e Respeito"
           selectedValue={safeCurrent.toneRespect}
           onChange={(val) => updateEvaluation && updateEvaluation('toneRespect', val)}
           options={[
@@ -136,7 +136,7 @@ export const Step2Method: React.FC<StepProps> = ({
 
         {/* 9. Compliment */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-live-green mb-2">Deixe um elogio para o professor (Opcional)</label>
+          <label className="block text-sm font-medium text-live-green mb-2">Deixe um elogio para o professor</label>
           <textarea
             value={safeCurrent.compliment || ''}
             onChange={(e) => updateEvaluation && updateEvaluation('compliment', e.target.value)}
